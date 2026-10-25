@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "会话 Cookie 续期",
+    "description": "在 DSH Web 浏览器会话 Cookie 过期前自动续期。"
+  }
+}

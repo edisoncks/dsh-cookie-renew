@@ -1,0 +1,33 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cookie">
+  <defs>
+    <radialGradient id="dshCookieBody" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12.6 11.4) scale(24.8)">
+      <stop stop-color="#FFDC93" />
+      <stop offset="0.48" stop-color="#F5B459" />
+      <stop offset="1" stop-color="#CE7F22" />
+    </radialGradient>
+    <linearGradient id="dshCookieChip" x1="18" y1="7" x2="18" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#744425" />
+      <stop offset="1" stop-color="#4A2A15" />
+    </linearGradient>
+    <linearGradient id="dshCookieGloss" x1="10" y1="10" x2="16" y2="16" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.4" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <path d="M 19.698 6.119 A 12.2 12.2 0 1 0 30.17 17.349 A 2.828 2.828 0 0 1 28.566 12.1 A 2.828 2.828 0 0 1 24.822 8.086 A 2.828 2.828 0 0 1 19.698 6.119 Z" fill="url(#dshCookieBody)" stroke="#AE6A18" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+  <path d="M9.73 15.19A8.8 8.8 0 0 1 15.28 9.83" stroke="url(#dshCookieGloss)" stroke-width="1.6" stroke-linecap="round" />
+
+  <g fill="url(#dshCookieChip)">
+    <circle cx="12.6" cy="13.2" r="1.6" />
+    <circle cx="10.9" cy="20.2" r="1.45" />
+    <circle cx="16.2" cy="24.4" r="1.55" />
+    <circle cx="22.6" cy="21.6" r="1.4" />
+    <circle cx="16.4" cy="17.7" r="1.1" />
+  </g>
+
+  <g fill="#FFFFFF" fill-opacity="0.3">
+    <circle cx="12.02" cy="12.62" r="0.52" />
+    <circle cx="15.68" cy="23.94" r="0.5" />
+  </g>
+</svg>

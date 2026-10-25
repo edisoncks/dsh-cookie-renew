@@ -1,0 +1,55 @@
+{
+  "name": "dsh-cookie-renew",
+  "version": "1.0.0",
+  "description": "Sliding renewal for the DSH web browser-session cookie",
+  "icon": "./icon.svg",
+  "license": "MIT",
+  "author": "Edison Chong",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "lib",
+    "locale/*.json",
+    "cordis.patch.yml",
+    "icon.svg",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20",
+    "dsh": "^0.2.1-rc.3"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "harness",
+    "plugin",
+    "cookie",
+    "session",
+    "renewal"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edisoncks/dsh-cookie-renew.git"
+  },
+  "homepage": "https://github.com/edisoncks/dsh-cookie-renew#readme",
+  "bugs": {
+    "url": "https://github.com/edisoncks/dsh-cookie-renew/issues"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.5"
+  }
+}

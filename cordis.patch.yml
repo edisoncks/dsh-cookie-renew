@@ -1,0 +1,20 @@
+# Bundle patch for dsh-cookie-renew: the layer that mounts the plugin.
+#
+# The profile composes the tree as every layer in `dsh.profile.bundles` order,
+# then the user's own `~/.dsh/profiles/<profile>/cordis.patch.yml`. This file is
+# this bundle's layer, so the entry lives here and the user patch only overrides
+# it by id.
+#
+# The `insert:` wrapper is required: a bare top-level row is treated as an
+# override for an existing entry id and is silently skipped when that id does
+# not exist.
+#
+# Keep the `id:` line free of trailing comments — the store precheck reads that
+# line and expects the value to be followed directly by a newline — and keep the
+# id equal to the package name so entry ids stay unique across the whole tree.
+- insert:
+    - id: dsh-cookie-renew
+      name: dsh-cookie-renew
+      config:
+        renewBelowFraction: 0.5
+        minIntervalMinutes: 60

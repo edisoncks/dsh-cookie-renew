@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Package archives
+*.tgz
+
+# Local scratch space
+.tmp/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db

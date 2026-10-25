@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Cookie Renew",
+    "description": "Renews the DSH web browser session cookie before it expires."
+  }
+}
