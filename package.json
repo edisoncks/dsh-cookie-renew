@@ -1,6 +1,6 @@
 {
   "name": "dsh-cookie-renew",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sliding renewal for the DSH web browser-session cookie",
   "icon": "./icon.svg",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "test": "node --test test/*.test.js"
   },
   "engines": {
-    "node": ">=20",
+    "node": ">=24.9.0",
     "dsh": "^0.2.1-rc.3"
   },
   "keywords": [

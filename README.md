@@ -16,9 +16,9 @@ Connection's `connection/request` waterfall — which wraps every authenticated
 lifetime drops below a fraction of its total lifetime, re-runs DSH's own token
 exchange and attaches the fresh `Set-Cookie` to the live response.
 
-- One runtime dependency (`@deepseek-ai/schemastery`), host-side only, Node >= 20.
+- One runtime dependency (`@deepseek-ai/schemastery`), host-side only, Node >= 24.9.
 - Installs from a pinned tag:
-  `dsh plugin --profile web add github:edisoncks/dsh-cookie-renew#v1.0.0`
+  `dsh plugin --profile web add github:edisoncks/dsh-cookie-renew#v1.0.1`
   (see **Install**).
 - Never reads the signing secret and never signs a cookie itself.
 - Turns an absolute 30-day credential into a renewable one (see **Caveats**).
@@ -67,11 +67,11 @@ Install the tagged release from GitHub. `dsh plugin` forwards to pnpm inside
 the profile, so one command writes the dependency and selects the bundle:
 
 ```sh
-dsh plugin --profile web add github:edisoncks/dsh-cookie-renew#v1.0.0
+dsh plugin --profile web add github:edisoncks/dsh-cookie-renew#v1.0.1
 ```
 
 Pin a tag, not a branch: `#main` re-resolves to whatever the branch holds on
-the next install, while `#v1.0.0` pins the released commit. pnpm installs
+the next install, while `#v1.0.1` pins the released commit. pnpm installs
 this package's one runtime dependency (`@deepseek-ai/schemastery`) itself, so
 no local `npm install` is involved.
 
@@ -79,7 +79,7 @@ That command is shorthand for two edits in `~/.dsh/profiles/web/package.json`:
 
 ```json
 "dependencies": {
-  "dsh-cookie-renew": "github:edisoncks/dsh-cookie-renew#v1.0.0"
+  "dsh-cookie-renew": "github:edisoncks/dsh-cookie-renew#v1.0.1"
 },
 "dsh": {
   "profile": {
@@ -123,11 +123,16 @@ profile's own `cordis.patch.yml` by entry id:
 
 Do not wrap that override in `insert:` — `insert:` adds a second entry, and the
 old hand-wired install used it. A bare row targets the existing id; a bare row
-whose id does not exist is silently skipped.
+whose id does not exist is skipped, with a warning on dsh 0.2.2.
 
 `package.json` declares `engines.dsh: ^0.2.1-rc.3`, the harness line this
-plugin is verified against, so `dsh plugin` refuses to install it on a
-runtime outside that range instead of failing later at renewal time.
+plugin is verified against: dsh evaluates the range with prereleases
+included, so it covers every 0.2.x runtime (the renewal path is unchanged
+through 0.2.2-rc.5), and `dsh plugin` refuses to install it on a runtime
+outside that range instead of failing later at renewal time. It also
+declares `engines.node: >=24.9.0`, the Node floor the dsh 0.2.2 runtime
+itself requires; dsh does not check a plugin's `engines.node`, so the
+field states the deployment floor rather than gating the install.
 
 Restart `dsh web` to mount the plugin. The existing cookie stays valid; no
 token URL is needed.
@@ -231,11 +236,11 @@ The inventory reads the icon without evaluating plugin code:
 | `icon.svg` | Square (36×36) plugin icon, declared through `package.json`'s `icon` field and embedded by the inventory as a data URL. |
 | `locale/en.json`, `locale/zh.json` | Inventory title and description. |
 | `test/index.test.js` | Threshold, throttle, authority/v2 filtering, candidate filtering, config schema (strict bounds) and live refs, diagnostics, failure handling, and minting tests. |
-| `package.json` | ESM package, `dsh.bundle.patch` pointing at the bundle patch, `icon` pointing at the art, one dependency (`@deepseek-ai/schemastery`), `engines.node >= 20`, `engines.dsh ^0.2.1-rc.3`. |
+| `package.json` | ESM package, `dsh.bundle.patch` pointing at the bundle patch, `icon` pointing at the art, one dependency (`@deepseek-ai/schemastery`), `engines.node >= 24.9.0`, `engines.dsh ^0.2.1-rc.3`. |
 | `LICENSE` | MIT license text. |
 | `CHANGELOG.md` | Release notes, one section per tag. |
 | `package-lock.json` | Lockfile for CI's `npm ci`; ignored when the package is consumed as a dependency. |
-| `.github/workflows/ci.yml` | CI: `npm ci` and `npm test` on Node 20/22/24, plus the packed-file-list check. |
+| `.github/workflows/ci.yml` | CI: `npm ci` and `npm test` on Node 24/26, plus the packed-file-list check. |
 
 ## Test
 
@@ -244,14 +249,14 @@ node --test test/*.test.js
 ```
 
 The suite uses only `node:test`, so it needs no extra tooling. CI runs it on
-Node 20, 22, and 24 against the lockfile, then checks that `npm pack` still
+Node 24 and 26 against the lockfile, then checks that `npm pack` still
 ships only the intended files.
 
 ## Releases
 
 Releases are annotated git tags named `vX.Y.Z` on `main`, and `CHANGELOG.md`
 records what changed. Installs should pin a tag
-(`github:edisoncks/dsh-cookie-renew#v1.0.0`), so an upgrade is an explicit
+(`github:edisoncks/dsh-cookie-renew#v1.0.1`), so an upgrade is an explicit
 edit of that tag rather than a silent move of a branch.
 
 To cut one: bump `version` in `package.json`, add the matching
@@ -270,12 +275,14 @@ git push --follow-tags
 - **Only `/api` HTTP requests.** WebSocket frames, static assets, and the index
   page do not trigger a mint. Every page load issues API calls, so normal use is
   covered.
-- **Tied to the 0.2.1 line.** The hook and the two Connection methods are
+- **Tied to the 0.2.x line.** The hook and the two Connection methods are
   public, including the synthetic request/response shape, but the cookie
   prefix, the v1 payload shape, the authority spelling, the `303` status, and
-  the lowercase `set-cookie` key are internal. `engines.dsh` pins the verified
-  line, and an unknown payload version is logged once instead of stopping
-  silently.
+  the lowercase `set-cookie` key are internal. `engines.dsh` pins
+  `^0.2.1-rc.3`: dsh evaluates the range with prereleases included, so it
+  admits every 0.2.x runtime — verified unchanged through 0.2.2-rc.5 — and
+  refuses 0.3.0 until the pin is raised and the internals are re-verified.
+  An unknown payload version is logged once instead of stopping silently.
 - **A stolen cookie becomes perpetually renewable.** Keep the GUI loopback-only,
   or bound exposure with `trustedHosts` and TLS.
 - **Per authority.** Browsers ignore ports when sending cookies; DSH binds this

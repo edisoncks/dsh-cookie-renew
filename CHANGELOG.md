@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-18
+
+### Changed
+
+- Raised `engines.node` from `>=20` to `>=24.9.0`, the Node floor every dsh
+  0.2.2 runtime declares, and trimmed CI from Node 20/22/24 to Node 24/26.
+  dsh does not gate plugins on `engines.node`; the field states the
+  deployment floor the plugin is realistically installed under.
+
+### Fixed
+
+- README now describes the harness range accurately: dsh evaluates
+  `engines.dsh` with prereleases included, so `^0.2.1-rc.3` admits every
+  0.2.x runtime and the Connection renewal path is unchanged through
+  0.2.2-rc.5. A profile override row whose id does not exist is skipped
+  with a warning on dsh 0.2.2, not silently.
+
 ## [1.0.0] - 2026-10-25
 
 First public release. The package was previously an unpublished local checkout
